@@ -5,7 +5,7 @@ Don't forget to exchange your repeated stickers!
 
 
 [![Markdown Lint](https://github.com/ezeBalsamo/Sticker-Album-Simulator/actions/workflows/markdown-lint.yml/badge.svg)](https://github.com/ezeBalsamo/Sticker-Album-Simulator/actions/workflows/markdown-lint.yml)
-[![GitHub release](https://img.shields.io/github/release/ezeBalsamo/Sticker-Album-Simulator.svg)](https://github.com/ezeBalsamo/Sticker-Album-Simulator/releases/latest)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/ezeBalsamo/Sticker-Album-Simulator?include_prereleases)
 
 This game and its development have an educational purpose, guided by Coderhouse's Javascript course.
 
