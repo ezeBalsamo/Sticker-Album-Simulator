@@ -3,16 +3,16 @@ import StickerAlbumNotifier from "./StickerAlbumNotifier.js";
 export default class AlbumDOMBasedNotifier extends StickerAlbumNotifier {
     constructor() {
         super();
-        let division = document.createElement('div');
+        let mainContent = document.createElement('main');
         this.generalNotificationParagraph = document.createElement('p');
         this.albumCompletionParagraph = document.createElement('p');
         this.openingPacksParagraph = document.createElement('p');
         this.openedPacksResultParagraph = document.createElement('p');
-        division.appendChild(this.generalNotificationParagraph);
-        division.appendChild(this.albumCompletionParagraph);
-        division.appendChild(this.openingPacksParagraph);
-        division.appendChild(this.openedPacksResultParagraph);
-        document.body.appendChild(division);
+        mainContent.appendChild(this.generalNotificationParagraph);
+        mainContent.appendChild(this.albumCompletionParagraph);
+        mainContent.appendChild(this.openingPacksParagraph);
+        mainContent.appendChild(this.openedPacksResultParagraph);
+        document.body.appendChild(mainContent);
     }
 
     updateGeneralNotificationTextTo(text) {
