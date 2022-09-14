@@ -28,6 +28,11 @@ export default class AlbumDOMBasedNotifier extends StickerAlbumNotifier {
         this.albumCompletionParagraph.innerText = text;
     }
 
+    updateAlbumCompletionTextWithColorTo(text, color){
+        this.updateAlbumCompletionTextTo(text);
+        this.albumCompletionParagraph.style.color = color;
+    }
+
     clearPacksOpeningText() {
         this.openingPacksParagraph.innerText = '';
         this.openedPacksResultParagraph.innerText = '';
@@ -84,7 +89,7 @@ export default class AlbumDOMBasedNotifier extends StickerAlbumNotifier {
     }
 
     albumHasBeenCompleted(numberOfPurchasedPacks) {
-        this.updateAlbumCompletionTextTo(`Congratulations, you managed to complete the album! You needed to buy ${numberOfPurchasedPacks} packs.`);
+        this.updateAlbumCompletionTextWithColorTo(`Congratulations, you managed to complete the album! You needed to buy ${numberOfPurchasedPacks} packs.`, 'green');
     }
 
     simulationHasEnded(isAlbumCompleted, remainingMoney, numberOfPurchasedPacks, completionPercentage) {
@@ -95,10 +100,10 @@ export default class AlbumDOMBasedNotifier extends StickerAlbumNotifier {
     }
 
     moneyHasRunOut(completionPercentage) {
-        this.updateAlbumCompletionTextTo(`Oh no! You've run out of money. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`);
+        this.updateAlbumCompletionTextWithColorTo(`Oh no! You've run out of money. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`, 'red');
     }
 
     remainingMoneyNotEnoughDueToExcessOfRepeatedStickers(completionPercentage) {
-        this.updateAlbumCompletionTextTo(`Well, it looks like you got so many repeat stickers that now you do not have enough money to complete the album. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`);
+        this.updateAlbumCompletionTextWithColorTo(`Well, it looks like you got so many repeat stickers that now you do not have enough money to complete the album. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`, 'red');
     }
 }
