@@ -88,7 +88,9 @@ export default class AlbumDOMBasedNotifier extends StickerAlbumNotifier {
     }
 
     simulationHasEnded(isAlbumCompleted, remainingMoney, numberOfPurchasedPacks, completionPercentage) {
-        this.clearPacksOpeningText();
+        this.generalNotificationParagraph.remove();
+        this.openedPacksResultParagraph.remove();
+        this.openingPacksParagraph.remove();
         super.simulationHasEnded(isAlbumCompleted, remainingMoney, numberOfPurchasedPacks, completionPercentage);
     }
 
