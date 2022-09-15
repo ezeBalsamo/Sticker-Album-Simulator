@@ -3,7 +3,7 @@ import StickerAlbumNotifier from "./StickerAlbumNotifier.js";
 export default class AlbumDOMBasedNotifier extends StickerAlbumNotifier {
     constructor() {
         super();
-        let mainContent = document.createElement('main');
+        let mainContent = document.getElementById('game');
         this.generalNotificationParagraph = document.createElement('p');
         this.albumCompletionParagraph = document.createElement('p');
         this.openingPacksParagraph = document.createElement('p');
