@@ -3,11 +3,11 @@ export default class StickerAlbumInputProvider {
         throw new Error(`${this.constructor.name} must implement ${method.name} since is a subclass responsibility.`)
     }
 
-    moneyWillingToSpend() {
-        this.signalSubclassResponsibilityFor(this.moneyWillingToSpend);
+    withMoneyWillingToSpendDo(callback) {
+        this.signalSubclassResponsibilityFor(this.withMoneyWillingToSpendDo);
     }
 
-    numberOfPacksToPurchase() {
-        this.signalSubclassResponsibilityFor(this.numberOfPacksToPurchase);
+    withNumberOfPacksToPurchaseDo(callback) {
+        this.signalSubclassResponsibilityFor(this.withNumberOfPacksToPurchaseDo);
     }
 }
