@@ -1,4 +1,5 @@
 import AlbumDOMBasedNotifier from './notifier/AlbumDOMBasedNotifier.js';
+import AlbumPromptBasedProvider from "./inputProvider/AlbumPromptBasedProvider.js";
 
 let differenceBetween = (collection, anotherCollection) => {
     return collection.filter(element => !anotherCollection.includes(element));
@@ -183,16 +184,6 @@ class StickerAlbumSimulator {
     }
 }
 
-class StickerAlbumSimulatorPrompter {
-    moneyWillingToSpend() {
-        return Number(prompt("Before we start, how much money are you willing to spend?"));
-    }
-
-    numberOfPacksToPurchase() {
-        return Number(prompt("How many packs do you want to purchase?"));
-    }
-}
-
 const argentinaStickers = [
     new Sticker('Argentina Logo'),
     new Sticker('Emiliano Martinez'),
@@ -228,8 +219,8 @@ const stickers = [...argentinaStickers, ...brazilStickers];
 const stickersProvider = new RandomStickersProvider(stickers);
 const packSpecification = new PackSpecification(150, 5);
 const playerNotifier = new AlbumDOMBasedNotifier();
-const playerInputPrompter = new StickerAlbumSimulatorPrompter();
+const playerInputProvider = new AlbumPromptBasedProvider();
 
-const simulator = new StickerAlbumSimulator(stickersProvider, packSpecification, playerNotifier, playerInputPrompter);
+const simulator = new StickerAlbumSimulator(stickersProvider, packSpecification, playerNotifier, playerInputProvider);
 
 simulator.startSimulation();
