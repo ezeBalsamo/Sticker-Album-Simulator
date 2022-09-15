@@ -9,9 +9,9 @@ export default class AlbumDOMBasedNotifier extends StickerAlbumNotifier {
         this.openingPacksParagraph = document.createElement('p');
         this.openedPacksResultParagraph = document.createElement('p');
         mainContent.appendChild(this.generalNotificationParagraph);
-        mainContent.appendChild(this.albumCompletionParagraph);
         mainContent.appendChild(this.openingPacksParagraph);
         mainContent.appendChild(this.openedPacksResultParagraph);
+        mainContent.appendChild(this.albumCompletionParagraph);
         document.body.appendChild(mainContent);
     }
 
