@@ -1,4 +1,4 @@
-import AlbumDOMBasedNotifier from './AlbumDOMBasedNotifier.js';
+import AlbumDOMBasedNotifier from './notifier/AlbumDOMBasedNotifier.js';
 
 let differenceBetween = (collection, anotherCollection) => {
     return collection.filter(element => !anotherCollection.includes(element));
