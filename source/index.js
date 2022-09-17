@@ -1,4 +1,5 @@
-import AlbumDOMBasedNotifier from './AlbumDOMBasedNotifier.js';
+import AlbumDOMBasedNotifier from './notifier/AlbumDOMBasedNotifier.js';
+import AlbumDOMBasedInputProvider from "./inputProvider/AlbumDOMBasedInputProvider.js";
 
 let differenceBetween = (collection, anotherCollection) => {
     return collection.filter(element => !anotherCollection.includes(element));
@@ -112,32 +113,35 @@ class StickerAlbumSimulator {
         return this.numberOfMissingStickers() === 0;
     }
 
-    startSimulationBySpendingAtMost(remainingMoney) {
-        this.playerNotifier.albumHasBeenGivenAway();
-        while (this.canAlbumBeCompletedWith(remainingMoney) && !this.isAlbumCompleted()) {
+    runTheSimulationSpendingAtMost(remainingMoney) {
+        if (this.canAlbumBeCompletedWith(remainingMoney) && !this.isAlbumCompleted()){
             this.playerNotifier.thereAreMissing(this.numberOfMissingStickers());
-            const packs = this.buyPacksSpendingAtMost(remainingMoney);
-            let purchasedPacksPrice = this.moneySpentWhenPurchasing(packs);
-            remainingMoney = remainingMoney - purchasedPacksPrice;
-            this.playerNotifier.packsPurchased(purchasedPacksPrice, remainingMoney);
+            this.purchasePacksAndDo(remainingMoney, packs => {
+                let purchasedPacksPrice = this.moneySpentWhenPurchasing(packs);
+                remainingMoney = remainingMoney - purchasedPacksPrice;
+                this.playerNotifier.packsPurchased(purchasedPacksPrice, remainingMoney);
 
-            this.playerNotifier.aboutToOpen(packs.length);
-            const newStickers = this.open(packs);
-            this.playerNotifier.packsOpened(newStickers.length, this.completionPercentage());
+                this.playerNotifier.aboutToOpen(packs.length);
+                const newStickers = this.open(packs);
+                this.playerNotifier.packsOpened(newStickers.length, this.completionPercentage());
+                this.runTheSimulationSpendingAtMost(remainingMoney);
+            });
+        }else {
+            this.playerNotifier.simulationHasEnded(this.isAlbumCompleted(), remainingMoney, this.purchasedPacks.length, this.completionPercentage());
         }
-
-        this.playerNotifier.simulationHasEnded(this.isAlbumCompleted(), remainingMoney, this.purchasedPacks.length, this.completionPercentage());
     }
 
     startSimulation() {
         this.playerNotifier.aboutToStartSimulation();
-        const moneyWillingToSpend = this.playerInputProvider.moneyWillingToSpend();
-        const minimumPriceForCompleteness = this.minimumPriceForCompleteness();
-        if (moneyWillingToSpend < minimumPriceForCompleteness) {
-            this.playerNotifier.moneyWillingToSpendIsBelow(minimumPriceForCompleteness);
-        } else {
-            this.startSimulationBySpendingAtMost(moneyWillingToSpend);
-        }
+        this.playerInputProvider.withMoneyWillingToSpendDo(moneyWillingToSpend => {
+            const minimumPriceForCompleteness = this.minimumPriceForCompleteness();
+            if (moneyWillingToSpend < minimumPriceForCompleteness) {
+                this.playerNotifier.moneyWillingToSpendIsBelow(minimumPriceForCompleteness);
+            } else {
+                this.playerNotifier.albumHasBeenGivenAway();
+                this.runTheSimulationSpendingAtMost(moneyWillingToSpend);
+            }
+        });
     }
 
     canAlbumBeCompletedWith(remainingMoney) {
@@ -148,16 +152,18 @@ class StickerAlbumSimulator {
         return this.packSpecification.canPurchase(numberOfPacks, remainingMoney);
     }
 
-    buyPacksSpendingAtMost(remainingMoney) {
-        let numberOfPacks = this.playerInputProvider.numberOfPacksToPurchase();
-        while (!this.canPurchase(numberOfPacks, remainingMoney)) {
-            const moneyRequired = this.packSpecification.moneyRequiredToPurchase(numberOfPacks);
-            this.playerNotifier.cannotPurchase(numberOfPacks, this.packSpecification.price, moneyRequired, remainingMoney);
-            numberOfPacks = this.playerInputProvider.numberOfPacksToPurchase();
-        }
-        const packs = this.packProvider.provide(numberOfPacks);
-        this.purchasedPacks.push(...packs);
-        return packs;
+    purchasePacksAndDo(remainingMoney, callback) {
+        this.playerInputProvider.withNumberOfPacksToPurchaseDo(numberOfPacks => {
+            if(this.canPurchase(numberOfPacks, remainingMoney)) {
+                const packs = this.packProvider.provide(numberOfPacks);
+                this.purchasedPacks.push(...packs);
+                callback(packs);
+            }else{
+                const moneyRequired = this.packSpecification.moneyRequiredToPurchase(numberOfPacks);
+                this.playerNotifier.cannotPurchase(numberOfPacks, this.packSpecification.price, moneyRequired, remainingMoney);
+                this.purchasePacksAndDo(remainingMoney, callback);
+            }
+        })
     }
 
     moneySpentWhenPurchasing(packs) {
@@ -180,16 +186,6 @@ class StickerAlbumSimulator {
 
     completionPercentage() {
         return Math.floor(this.completionRatio() * 100);
-    }
-}
-
-class StickerAlbumSimulatorPrompter {
-    moneyWillingToSpend() {
-        return Number(prompt("Before we start, how much money are you willing to spend?"));
-    }
-
-    numberOfPacksToPurchase() {
-        return Number(prompt("How many packs do you want to purchase?"));
     }
 }
 
@@ -228,8 +224,8 @@ const stickers = [...argentinaStickers, ...brazilStickers];
 const stickersProvider = new RandomStickersProvider(stickers);
 const packSpecification = new PackSpecification(150, 5);
 const playerNotifier = new AlbumDOMBasedNotifier();
-const playerInputPrompter = new StickerAlbumSimulatorPrompter();
+const playerInputProvider = new AlbumDOMBasedInputProvider();
 
-const simulator = new StickerAlbumSimulator(stickersProvider, packSpecification, playerNotifier, playerInputPrompter);
+const simulator = new StickerAlbumSimulator(stickersProvider, packSpecification, playerNotifier, playerInputProvider);
 
 simulator.startSimulation();
