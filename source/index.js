@@ -1,5 +1,5 @@
 import AlbumDOMBasedNotifier from './notifier/AlbumDOMBasedNotifier.js';
-import AlbumDOMBasedInputProvider from "./inputProvider/AlbumDOMBasedInputProvider.js";
+import AlbumDOMBasedInputProvider from "./input-provider/AlbumDOMBasedInputProvider.js";
 
 let differenceBetween = (collection, anotherCollection) => {
     return collection.filter(element => !anotherCollection.includes(element));
