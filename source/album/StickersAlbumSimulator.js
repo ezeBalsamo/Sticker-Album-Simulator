@@ -1,7 +1,7 @@
 import PackProvider from "../packs/PackProvider.js";
 import {differenceBetween} from "../collection/extensions.js";
 
-export default class StickerAlbumSimulator {
+export default class StickersAlbumSimulator {
     constructor(stickersProvider, packSpecification, playerNotifier, playerInputProvider) {
         this.stickersProvider = stickersProvider;
         this.packSpecification = packSpecification;

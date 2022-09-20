@@ -3,7 +3,7 @@ import AlbumDOMBasedInputProvider from "./input-provider/AlbumDOMBasedInputProvi
 import Sticker from "./stickers/Sticker.js";
 import RandomStickersProvider from "./stickers/RandomStickersProvider.js";
 import PackSpecification from "./packs/PackSpecification.js";
-import StickerAlbumSimulator from "./album/StickerAlbumSimulator.js";
+import StickersAlbumSimulator from "./album/StickersAlbumSimulator.js";
 
 const argentinaStickers = [
     new Sticker('Argentina Logo'),
@@ -42,6 +42,6 @@ const packSpecification = new PackSpecification(150, 5);
 const playerNotifier = new AlbumDOMBasedNotifier();
 const playerInputProvider = new AlbumDOMBasedInputProvider();
 
-const simulator = new StickerAlbumSimulator(stickersProvider, packSpecification, playerNotifier, playerInputProvider);
+const simulator = new StickersAlbumSimulator(stickersProvider, packSpecification, playerNotifier, playerInputProvider);
 
 simulator.startSimulation();
