@@ -2,6 +2,7 @@ import AlbumDOMBasedNotifier from './notifier/AlbumDOMBasedNotifier.js';
 import AlbumDOMBasedInputProvider from "./input-provider/AlbumDOMBasedInputProvider.js";
 import {differenceBetween} from "./collection/extensions.js";
 import Sticker from "./stickers/Sticker.js";
+import RandomStickersProvider from "./stickers/RandomStickersProvider.js";
 
 class Pack {
     constructor(stickers, price) {
@@ -26,31 +27,6 @@ class PackSpecification {
 
     canPurchase(numberOfPacks, moneyToSpend) {
         return moneyToSpend >= this.moneyRequiredToPurchase(numberOfPacks);
-    }
-}
-
-class RandomStickersProvider {
-    constructor(stickers) {
-        this.stickers = stickers;
-    }
-
-    sampleSticker() {
-        return this.allStickers()[Math.floor(Math.random() * this.stickers.length)];
-    }
-
-    allStickers() {
-        return this.stickers;
-    }
-
-    provideDifferentStickersUpTo(numberOfStickers) {
-        const sampleStickers = [];
-        while (sampleStickers.length < numberOfStickers) {
-            let sticker = this.sampleSticker();
-            if (!sampleStickers.includes(sticker)) {
-                sampleStickers.push(sticker);
-            }
-        }
-        return sampleStickers;
     }
 }
 
