@@ -3,28 +3,8 @@ import AlbumDOMBasedInputProvider from "./input-provider/AlbumDOMBasedInputProvi
 import {differenceBetween} from "./collection/extensions.js";
 import Sticker from "./stickers/Sticker.js";
 import RandomStickersProvider from "./stickers/RandomStickersProvider.js";
-import Pack from "./packs/Pack.js";
 import PackSpecification from "./packs/PackSpecification.js";
-
-class PackProvider {
-    constructor(packSpecification, stickersProvider) {
-        this.packSpecification = packSpecification;
-        this.stickersProvider = stickersProvider;
-    }
-
-    pack() {
-        const stickers = this.stickersProvider.provideDifferentStickersUpTo(this.packSpecification.numberOfStickers);
-        return new Pack(stickers, this.packSpecification.price);
-    }
-
-    provide(numberOfPacks) {
-        const packs = [];
-        for (let i = 0; i < numberOfPacks; i++) {
-            packs.push(this.pack());
-        }
-        return packs;
-    }
-}
+import PackProvider from "./packs/PackProvider.js";
 
 class StickerAlbumSimulator {
     constructor(stickersProvider, packSpecification, playerNotifier, playerInputProvider) {
