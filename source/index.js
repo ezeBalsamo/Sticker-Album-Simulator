@@ -3,13 +3,7 @@ import AlbumDOMBasedInputProvider from "./input-provider/AlbumDOMBasedInputProvi
 import {differenceBetween} from "./collection/extensions.js";
 import Sticker from "./stickers/Sticker.js";
 import RandomStickersProvider from "./stickers/RandomStickersProvider.js";
-
-class Pack {
-    constructor(stickers, price) {
-        this.stickers = stickers;
-        this.price = price;
-    }
-}
+import Pack from "./packs/Pack.js";
 
 class PackSpecification {
     constructor(price, numberOfStickers) {
