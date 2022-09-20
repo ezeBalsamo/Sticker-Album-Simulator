@@ -1,12 +1,7 @@
 import AlbumDOMBasedNotifier from './notifier/AlbumDOMBasedNotifier.js';
 import AlbumDOMBasedInputProvider from "./input-provider/AlbumDOMBasedInputProvider.js";
 import {differenceBetween} from "./collection/extensions.js";
-
-class Sticker {
-    constructor(name) {
-        this.name = name
-    }
-}
+import Sticker from "./stickers/Sticker.js";
 
 class Pack {
     constructor(stickers, price) {
