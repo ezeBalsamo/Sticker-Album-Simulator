@@ -1,9 +1,6 @@
 import AlbumDOMBasedNotifier from './notifier/AlbumDOMBasedNotifier.js';
 import AlbumDOMBasedInputProvider from "./input-provider/AlbumDOMBasedInputProvider.js";
-
-let differenceBetween = (collection, anotherCollection) => {
-    return collection.filter(element => !anotherCollection.includes(element));
-}
+import {differenceBetween} from "./collection/extensions.js";
 
 class Sticker {
     constructor(name) {
