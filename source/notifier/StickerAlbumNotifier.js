@@ -74,4 +74,12 @@ export default class StickerAlbumNotifier {
     descriptionThatAlbumIsCompletedUpTo(completionPercentage) {
         return `At least you managed to complete ${completionPercentage}% of your album.`;
     }
+
+    withMoneyWillingToSpendDo(callback) {
+        this.signalSubclassResponsibilityFor(this.withMoneyWillingToSpendDo);
+    }
+
+    withNumberOfPacksToPurchaseDo(callback) {
+        this.signalSubclassResponsibilityFor(this.withNumberOfPacksToPurchaseDo);
+    }
 }
