@@ -3,4 +3,8 @@ export default class LocalStorageBasedPersistenceSystem {
         const progress = {remainingMoney, numberOfPurchasedPacks, stickers};
         localStorage.setItem(player, JSON.stringify(progress));
     }
+
+    removeProgressOf(player){
+        localStorage.removeItem(player);
+    }
 }

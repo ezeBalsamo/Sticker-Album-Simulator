@@ -38,6 +38,7 @@ export default class StickersAlbumSimulator {
     }
 
     simulationHasEndedRemaining(money){
+        this.persistenceSystem.removeProgressOf(this.player);
         this.interactionSystem.simulationHasEnded(
             this.isAlbumCompleted(),
             this.player,
