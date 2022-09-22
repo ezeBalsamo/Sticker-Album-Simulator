@@ -3,6 +3,7 @@ import Sticker from "./stickers/Sticker.js";
 import RandomStickersProvider from "./stickers/RandomStickersProvider.js";
 import PackSpecification from "./packs/PackSpecification.js";
 import StickersAlbumSimulator from "./album/StickersAlbumSimulator.js";
+import LocalStorageBasedPersistenceSystem from "./persistence/LocalStorageBasedPersistenceSystem.js";
 
 const argentinaStickers = [
     new Sticker('Argentina Logo'),
@@ -39,8 +40,14 @@ const stickers = [...argentinaStickers, ...brazilStickers];
 const stickersProvider = new RandomStickersProvider(stickers);
 const packSpecification = new PackSpecification(150, 5);
 const interactionSystem = new DOMBasedInteractionSystem();
+const persistenceSystem = new LocalStorageBasedPersistenceSystem();
 
 interactionSystem.withPlayerDo((player) => {
-    const simulator = new StickersAlbumSimulator(player, stickersProvider, packSpecification, interactionSystem);
+    const simulator = new StickersAlbumSimulator(
+        player,
+        stickersProvider,
+        packSpecification,
+        interactionSystem,
+        persistenceSystem);
     simulator.startSimulation();
 })

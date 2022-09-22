@@ -2,11 +2,12 @@ import PackProvider from "../packs/PackProvider.js";
 import {differenceBetween} from "../collection/extensions.js";
 
 export default class StickersAlbumSimulator {
-    constructor(player, stickersProvider, packSpecification, interactionSystem) {
+    constructor(player, stickersProvider, packSpecification, interactionSystem, persistenceSystem) {
         this.player = player;
         this.stickersProvider = stickersProvider;
         this.packSpecification = packSpecification;
         this.interactionSystem = interactionSystem;
+        this.persistenceSystem = persistenceSystem;
         this.packProvider = new PackProvider(this.packSpecification, this.stickersProvider);
         this.stickedStickers = [];
         this.purchasedPacks = [];
@@ -32,8 +33,13 @@ export default class StickersAlbumSimulator {
         return this.numberOfMissingStickers() === 0;
     }
 
+    saveProgressRemaining(money){
+        this.persistenceSystem.saveProgressOf(this.player, money, this.purchasedPacks.length, this.stickedStickers);
+    }
+
     runTheSimulationSpendingAtMost(remainingMoney) {
         if (this.canAlbumBeCompletedWith(remainingMoney) && !this.isAlbumCompleted()){
+            this.saveProgressRemaining(remainingMoney);
             this.interactionSystem.thereAreMissing(this.numberOfMissingStickers());
             this.purchasePacksAndDo(remainingMoney, packs => {
                 let purchasedPacksPrice = this.moneySpentWhenPurchasing(packs);
