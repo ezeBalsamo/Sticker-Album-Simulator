@@ -10,7 +10,7 @@ export default class FormBuilder{
         return this;
     }
 
-    addNumericInputLabeled(labelText){
+    addInputLabeled(labelText, inputType){
         const label = document.createElement("label");
         label.setAttribute("for", labelText);
         label.innerText = labelText;
@@ -18,9 +18,19 @@ export default class FormBuilder{
         const input = document.createElement("input");
         input.setAttribute("id", labelText);
         input.setAttribute("name", labelText);
-        input.setAttribute("type", "number");
+        input.setAttribute("type", inputType);
 
         this.append(label).append(input);
+        return this;
+    }
+
+    addNumericInputLabeled(labelText){
+        this.addInputLabeled(labelText, "number");
+        return this;
+    }
+
+    addTextInputLabeled(labelText){
+        this.addInputLabeled(labelText, "text");
         return this;
     }
 
