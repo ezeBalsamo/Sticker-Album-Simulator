@@ -2,11 +2,10 @@ import PackProvider from "../packs/PackProvider.js";
 import {differenceBetween} from "../collection/extensions.js";
 
 export default class StickersAlbumSimulator {
-    constructor(stickersProvider, packSpecification, playerNotifier, playerInputProvider) {
+    constructor(stickersProvider, packSpecification, playerNotifier) {
         this.stickersProvider = stickersProvider;
         this.packSpecification = packSpecification;
         this.playerNotifier = playerNotifier;
-        this.playerInputProvider = playerInputProvider;
         this.packProvider = new PackProvider(this.packSpecification, this.stickersProvider);
         this.stickedStickers = [];
         this.purchasedPacks = [];
@@ -52,7 +51,7 @@ export default class StickersAlbumSimulator {
 
     startSimulation() {
         this.playerNotifier.aboutToStartSimulation();
-        this.playerInputProvider.withMoneyWillingToSpendDo(moneyWillingToSpend => {
+        this.playerNotifier.withMoneyWillingToSpendDo(moneyWillingToSpend => {
             const minimumPriceForCompleteness = this.minimumPriceForCompleteness();
             if (moneyWillingToSpend < minimumPriceForCompleteness) {
                 this.playerNotifier.moneyWillingToSpendIsBelow(minimumPriceForCompleteness);
@@ -72,7 +71,7 @@ export default class StickersAlbumSimulator {
     }
 
     purchasePacksAndDo(remainingMoney, callback) {
-        this.playerInputProvider.withNumberOfPacksToPurchaseDo(numberOfPacks => {
+        this.playerNotifier.withNumberOfPacksToPurchaseDo(numberOfPacks => {
             if(this.canPurchase(numberOfPacks, remainingMoney)) {
                 const packs = this.packProvider.provide(numberOfPacks);
                 this.purchasedPacks.push(...packs);
