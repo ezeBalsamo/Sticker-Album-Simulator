@@ -48,4 +48,12 @@ export default class AlbumAlertNotifier extends StickerAlbumNotifier {
     remainingMoneyNotEnoughDueToExcessOfRepeatedStickers(completionPercentage) {
         alert(`Well, it looks like you got so many repeat stickers that now you do not have enough money to complete the album. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`);
     }
+
+    withMoneyWillingToSpendDo(callback) {
+        callback(Number(prompt("Before we start, how much money are you willing to spend?")));
+    }
+
+    withNumberOfPacksToPurchaseDo(callback) {
+        callback(Number(prompt("How many packs do you want to purchase?")));
+    }
 }
