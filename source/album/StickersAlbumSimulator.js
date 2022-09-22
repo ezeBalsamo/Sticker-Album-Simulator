@@ -1,12 +1,14 @@
 import PackProvider from "../packs/PackProvider.js";
 import {differenceBetween} from "../collection/extensions.js";
+import Sticker from "../stickers/Sticker.js";
 
 export default class StickersAlbumSimulator {
-    constructor(player, stickersProvider, packSpecification, interactionSystem) {
+    constructor(player, stickersProvider, packSpecification, interactionSystem, persistenceSystem) {
         this.player = player;
         this.stickersProvider = stickersProvider;
         this.packSpecification = packSpecification;
         this.interactionSystem = interactionSystem;
+        this.persistenceSystem = persistenceSystem;
         this.packProvider = new PackProvider(this.packSpecification, this.stickersProvider);
         this.stickedStickers = [];
         this.purchasedPacks = [];
@@ -17,7 +19,7 @@ export default class StickersAlbumSimulator {
     }
 
     missingStickers() {
-        return differenceBetween(this.stickersProvider.allStickers(), this.stickedStickers);
+        return differenceBetween(this.stickersProvider.allStickers(), this.stickedStickers, Sticker.areEquivalents);
     }
 
     numberOfMissingStickers() {
@@ -32,8 +34,23 @@ export default class StickersAlbumSimulator {
         return this.numberOfMissingStickers() === 0;
     }
 
+    saveProgressRemaining(money){
+        this.persistenceSystem.saveProgressOf(this.player, money, this.purchasedPacks, this.stickedStickers);
+    }
+
+    simulationHasEndedRemaining(money){
+        this.persistenceSystem.removeProgressOf(this.player);
+        this.interactionSystem.simulationHasEnded(
+            this.isAlbumCompleted(),
+            this.player,
+            money,
+            this.purchasedPacks.length,
+            this.completionPercentage());
+    }
+
     runTheSimulationSpendingAtMost(remainingMoney) {
         if (this.canAlbumBeCompletedWith(remainingMoney) && !this.isAlbumCompleted()){
+            this.saveProgressRemaining(remainingMoney);
             this.interactionSystem.thereAreMissing(this.numberOfMissingStickers());
             this.purchasePacksAndDo(remainingMoney, packs => {
                 let purchasedPacksPrice = this.moneySpentWhenPurchasing(packs);
@@ -46,11 +63,11 @@ export default class StickersAlbumSimulator {
                 this.runTheSimulationSpendingAtMost(remainingMoney);
             });
         }else {
-            this.interactionSystem.simulationHasEnded(this.isAlbumCompleted(), this.player, remainingMoney, this.purchasedPacks.length, this.completionPercentage());
+            this.simulationHasEndedRemaining(remainingMoney);
         }
     }
 
-    startSimulation() {
+    start(){
         this.interactionSystem.aboutToStartSimulationFor(this.player);
         this.interactionSystem.withMoneyWillingToSpendDo(moneyWillingToSpend => {
             const minimumPriceForCompleteness = this.minimumPriceForCompleteness();
@@ -60,7 +77,21 @@ export default class StickersAlbumSimulator {
                 this.interactionSystem.albumHasBeenGivenAway();
                 this.runTheSimulationSpendingAtMost(moneyWillingToSpend);
             }
-        });
+        })
+    }
+
+    resumeFrom({remainingMoney, purchasedPacks, stickers}){
+        this.purchasedPacks = purchasedPacks;
+        this.stickedStickers = stickers;
+        this.runTheSimulationSpendingAtMost(remainingMoney);
+    }
+
+    startSimulation() {
+        this.persistenceSystem.progressOf(
+            this.player,
+            (progress) => this.resumeFrom(progress),
+            () => this.start()
+        );
     }
 
     canAlbumBeCompletedWith(remainingMoney) {
@@ -100,7 +131,7 @@ export default class StickersAlbumSimulator {
     }
 
     newStickersAfterOpening(pack) {
-        return differenceBetween(pack.stickers, this.stickedStickers);
+        return differenceBetween(pack.stickers, this.stickedStickers, Sticker.areEquivalents);
     }
 
     completionPercentage() {
