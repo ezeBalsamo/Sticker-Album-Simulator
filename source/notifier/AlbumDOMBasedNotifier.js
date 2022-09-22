@@ -1,5 +1,5 @@
 import StickerAlbumNotifier from "./StickerAlbumNotifier.js";
-import FormBuilder from "../input-provider/FormBuilder.js";
+import FormBuilder from "./FormBuilder.js";
 
 export default class AlbumDOMBasedNotifier extends StickerAlbumNotifier {
     constructor() {
