@@ -1,7 +1,7 @@
-import StickerAlbumNotifier from "./StickerAlbumNotifier.js";
+import UserInteractionSystem from "./UserInteractionSystem.js";
 import FormBuilder from "./FormBuilder.js";
 
-export default class AlbumDOMBasedNotifier extends StickerAlbumNotifier {
+export default class DOMBasedInteractionSystem extends UserInteractionSystem {
     constructor() {
         super();
         this.mainContent = document.getElementById('game');

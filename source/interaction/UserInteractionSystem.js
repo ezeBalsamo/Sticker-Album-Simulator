@@ -1,4 +1,4 @@
-export default class StickerAlbumNotifier {
+export default class UserInteractionSystem {
 
     signalSubclassResponsibilityFor(method) {
         throw new Error(`${this.constructor.name} must implement ${method.name} since is a subclass responsibility.`)

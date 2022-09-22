@@ -1,6 +1,6 @@
-import StickerAlbumNotifier from "./StickerAlbumNotifier.js";
+import UserInteractionSystem from "./UserInteractionSystem.js";
 
-export default class AlbumAlertNotifier extends StickerAlbumNotifier {
+export default class AlertBasedInteractionSystem extends UserInteractionSystem {
     aboutToStartSimulation() {
         alert("Hi there! So, you want to complete this album... your wallet is going to suffer, you know that, right?");
     }
