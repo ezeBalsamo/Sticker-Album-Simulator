@@ -2,10 +2,10 @@ import PackProvider from "../packs/PackProvider.js";
 import {differenceBetween} from "../collection/extensions.js";
 
 export default class StickersAlbumSimulator {
-    constructor(stickersProvider, packSpecification, playerNotifier) {
+    constructor(stickersProvider, packSpecification, interactionSystem) {
         this.stickersProvider = stickersProvider;
         this.packSpecification = packSpecification;
-        this.playerNotifier = playerNotifier;
+        this.interactionSystem = interactionSystem;
         this.packProvider = new PackProvider(this.packSpecification, this.stickersProvider);
         this.stickedStickers = [];
         this.purchasedPacks = [];
@@ -33,30 +33,30 @@ export default class StickersAlbumSimulator {
 
     runTheSimulationSpendingAtMost(remainingMoney) {
         if (this.canAlbumBeCompletedWith(remainingMoney) && !this.isAlbumCompleted()){
-            this.playerNotifier.thereAreMissing(this.numberOfMissingStickers());
+            this.interactionSystem.thereAreMissing(this.numberOfMissingStickers());
             this.purchasePacksAndDo(remainingMoney, packs => {
                 let purchasedPacksPrice = this.moneySpentWhenPurchasing(packs);
                 remainingMoney = remainingMoney - purchasedPacksPrice;
-                this.playerNotifier.packsPurchased(purchasedPacksPrice, remainingMoney);
+                this.interactionSystem.packsPurchased(purchasedPacksPrice, remainingMoney);
 
-                this.playerNotifier.aboutToOpen(packs.length);
+                this.interactionSystem.aboutToOpen(packs.length);
                 const newStickers = this.open(packs);
-                this.playerNotifier.packsOpened(newStickers.length, this.completionPercentage());
+                this.interactionSystem.packsOpened(newStickers.length, this.completionPercentage());
                 this.runTheSimulationSpendingAtMost(remainingMoney);
             });
         }else {
-            this.playerNotifier.simulationHasEnded(this.isAlbumCompleted(), remainingMoney, this.purchasedPacks.length, this.completionPercentage());
+            this.interactionSystem.simulationHasEnded(this.isAlbumCompleted(), remainingMoney, this.purchasedPacks.length, this.completionPercentage());
         }
     }
 
     startSimulation() {
-        this.playerNotifier.aboutToStartSimulation();
-        this.playerNotifier.withMoneyWillingToSpendDo(moneyWillingToSpend => {
+        this.interactionSystem.aboutToStartSimulation();
+        this.interactionSystem.withMoneyWillingToSpendDo(moneyWillingToSpend => {
             const minimumPriceForCompleteness = this.minimumPriceForCompleteness();
             if (moneyWillingToSpend < minimumPriceForCompleteness) {
-                this.playerNotifier.moneyWillingToSpendIsBelow(minimumPriceForCompleteness);
+                this.interactionSystem.moneyWillingToSpendIsBelow(minimumPriceForCompleteness);
             } else {
-                this.playerNotifier.albumHasBeenGivenAway();
+                this.interactionSystem.albumHasBeenGivenAway();
                 this.runTheSimulationSpendingAtMost(moneyWillingToSpend);
             }
         });
@@ -71,14 +71,14 @@ export default class StickersAlbumSimulator {
     }
 
     purchasePacksAndDo(remainingMoney, callback) {
-        this.playerNotifier.withNumberOfPacksToPurchaseDo(numberOfPacks => {
+        this.interactionSystem.withNumberOfPacksToPurchaseDo(numberOfPacks => {
             if(this.canPurchase(numberOfPacks, remainingMoney)) {
                 const packs = this.packProvider.provide(numberOfPacks);
                 this.purchasedPacks.push(...packs);
                 callback(packs);
             }else{
                 const moneyRequired = this.packSpecification.moneyRequiredToPurchase(numberOfPacks);
-                this.playerNotifier.cannotPurchase(numberOfPacks, this.packSpecification.price, moneyRequired, remainingMoney);
+                this.interactionSystem.cannotPurchase(numberOfPacks, this.packSpecification.price, moneyRequired, remainingMoney);
                 this.purchasePacksAndDo(remainingMoney, callback);
             }
         })
