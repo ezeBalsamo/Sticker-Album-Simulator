@@ -37,6 +37,15 @@ export default class StickersAlbumSimulator {
         this.persistenceSystem.saveProgressOf(this.player, money, this.purchasedPacks.length, this.stickedStickers);
     }
 
+    simulationHasEndedRemaining(money){
+        this.interactionSystem.simulationHasEnded(
+            this.isAlbumCompleted(),
+            this.player,
+            money,
+            this.purchasedPacks.length,
+            this.completionPercentage());
+    }
+
     runTheSimulationSpendingAtMost(remainingMoney) {
         if (this.canAlbumBeCompletedWith(remainingMoney) && !this.isAlbumCompleted()){
             this.saveProgressRemaining(remainingMoney);
@@ -52,7 +61,7 @@ export default class StickersAlbumSimulator {
                 this.runTheSimulationSpendingAtMost(remainingMoney);
             });
         }else {
-            this.interactionSystem.simulationHasEnded(this.isAlbumCompleted(), this.player, remainingMoney, this.purchasedPacks.length, this.completionPercentage());
+            this.simulationHasEndedRemaining(remainingMoney);
         }
     }
 
