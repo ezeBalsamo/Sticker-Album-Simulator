@@ -1,18 +1,19 @@
-import StickerAlbumNotifier from "./StickerAlbumNotifier.js";
+import UserInteractionSystem from "./UserInteractionSystem.js";
+import FormBuilder from "./FormBuilder.js";
 
-export default class AlbumDOMBasedNotifier extends StickerAlbumNotifier {
+export default class DOMBasedInteractionSystem extends UserInteractionSystem {
     constructor() {
         super();
-        let mainContent = document.getElementById('game');
+        this.mainContent = document.getElementById('game');
         this.generalNotificationParagraph = document.createElement('p');
         this.albumCompletionParagraph = document.createElement('p');
         this.openingPacksParagraph = document.createElement('p');
         this.openedPacksResultParagraph = document.createElement('p');
-        mainContent.appendChild(this.generalNotificationParagraph);
-        mainContent.appendChild(this.openingPacksParagraph);
-        mainContent.appendChild(this.openedPacksResultParagraph);
-        mainContent.appendChild(this.albumCompletionParagraph);
-        document.body.appendChild(mainContent);
+        this.mainContent.appendChild(this.generalNotificationParagraph);
+        this.mainContent.appendChild(this.openingPacksParagraph);
+        this.mainContent.appendChild(this.openedPacksResultParagraph);
+        this.mainContent.appendChild(this.albumCompletionParagraph);
+        document.body.appendChild(this.mainContent);
     }
 
     updateGeneralNotificationTextTo(text) {
@@ -105,5 +106,43 @@ export default class AlbumDOMBasedNotifier extends StickerAlbumNotifier {
 
     remainingMoneyNotEnoughDueToExcessOfRepeatedStickers(completionPercentage) {
         this.updateAlbumCompletionTextWithColorTo(`Well, it looks like you got so many repeat stickers that now you do not have enough money to complete the album. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`, 'red');
+    }
+
+    withMoneyWillingToSpendDo(callback) {
+        const paragraph = document.createElement("p");
+        paragraph.innerText = "Before we start, how much money are you willing to spend?";
+
+        const form =
+            new FormBuilder()
+                .addNumericInputLabeled('money')
+                .withDataFromSubmitDo(formData => {
+                    paragraph.remove();
+                    form.remove();
+                    callback(Number(formData.money));
+                })
+                .build();
+
+        this.mainContent
+            .appendChild(paragraph)
+            .appendChild(form);
+    }
+
+    withNumberOfPacksToPurchaseDo(callback) {
+        const paragraph = document.createElement("p");
+        paragraph.innerText = "How many packs do you want to purchase?";
+
+        const form =
+            new FormBuilder()
+                .addNumericInputLabeled("packs")
+                .withDataFromSubmitDo(formData => {
+                    paragraph.remove();
+                    form.remove();
+                    callback(Number(formData.packs));
+                })
+                .build();
+
+        this.mainContent
+            .appendChild(paragraph)
+            .appendChild(form);
     }
 }

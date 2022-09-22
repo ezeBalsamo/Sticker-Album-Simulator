@@ -1,5 +1,4 @@
-import AlbumDOMBasedNotifier from './notifier/AlbumDOMBasedNotifier.js';
-import AlbumDOMBasedInputProvider from "./input-provider/AlbumDOMBasedInputProvider.js";
+import DOMBasedInteractionSystem from './interaction/DOMBasedInteractionSystem.js';
 import Sticker from "./stickers/Sticker.js";
 import RandomStickersProvider from "./stickers/RandomStickersProvider.js";
 import PackSpecification from "./packs/PackSpecification.js";
@@ -39,9 +38,8 @@ const stickers = [...argentinaStickers, ...brazilStickers];
 
 const stickersProvider = new RandomStickersProvider(stickers);
 const packSpecification = new PackSpecification(150, 5);
-const playerNotifier = new AlbumDOMBasedNotifier();
-const playerInputProvider = new AlbumDOMBasedInputProvider();
+const playerNotifier = new DOMBasedInteractionSystem();
 
-const simulator = new StickersAlbumSimulator(stickersProvider, packSpecification, playerNotifier, playerInputProvider);
+const simulator = new StickersAlbumSimulator(stickersProvider, packSpecification, playerNotifier);
 
 simulator.startSimulation();

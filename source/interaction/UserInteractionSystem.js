@@ -1,4 +1,4 @@
-export default class StickerAlbumNotifier {
+export default class UserInteractionSystem {
 
     signalSubclassResponsibilityFor(method) {
         throw new Error(`${this.constructor.name} must implement ${method.name} since is a subclass responsibility.`)
@@ -73,5 +73,13 @@ export default class StickerAlbumNotifier {
 
     descriptionThatAlbumIsCompletedUpTo(completionPercentage) {
         return `At least you managed to complete ${completionPercentage}% of your album.`;
+    }
+
+    withMoneyWillingToSpendDo(callback) {
+        this.signalSubclassResponsibilityFor(this.withMoneyWillingToSpendDo);
+    }
+
+    withNumberOfPacksToPurchaseDo(callback) {
+        this.signalSubclassResponsibilityFor(this.withNumberOfPacksToPurchaseDo);
     }
 }
