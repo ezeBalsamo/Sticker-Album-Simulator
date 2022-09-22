@@ -4,8 +4,8 @@ export default class UserInteractionSystem {
         throw new Error(`${this.constructor.name} must implement ${method.name} since is a subclass responsibility.`)
     }
 
-    aboutToStartSimulation() {
-        this.signalSubclassResponsibilityFor(this.aboutToStartSimulation);
+    aboutToStartSimulationFor(player) {
+        this.signalSubclassResponsibilityFor(this.aboutToStartSimulationFor);
     }
 
     moneyWillingToSpendIsBelow(minimumPriceForCompleteness) {
@@ -48,26 +48,25 @@ export default class UserInteractionSystem {
         this.signalSubclassResponsibilityFor(this.openedPacksHadNewStickers);
     }
 
-    simulationHasEnded(isAlbumCompleted, remainingMoney, numberOfPurchasedPacks, completionPercentage) {
+    simulationHasEnded(isAlbumCompleted, player, remainingMoney, numberOfPurchasedPacks, completionPercentage) {
         if (isAlbumCompleted) {
-            this.albumHasBeenCompleted(numberOfPurchasedPacks);
+            this.albumHasBeenCompleted(player, numberOfPurchasedPacks);
         } else if (remainingMoney === 0) {
-            this.moneyHasRunOut(completionPercentage);
+            this.moneyHasRunOut(player, completionPercentage);
         } else {
-            this.remainingMoneyNotEnoughDueToExcessOfRepeatedStickers(completionPercentage);
+            this.remainingMoneyNotEnoughDueToExcessOfRepeatedStickers(player, completionPercentage);
         }
     }
 
-    albumHasBeenCompleted(numberOfPurchasedPacks) {
+    albumHasBeenCompleted(player, numberOfPurchasedPacks) {
         this.signalSubclassResponsibilityFor(this.albumHasBeenCompleted);
     }
 
-    moneyHasRunOut(completionPercentage) {
+    moneyHasRunOut(player, completionPercentage) {
         this.signalSubclassResponsibilityFor(this.moneyHasRunOut);
-        1
     }
 
-    remainingMoneyNotEnoughDueToExcessOfRepeatedStickers(completionPercentage) {
+    remainingMoneyNotEnoughDueToExcessOfRepeatedStickers(player, completionPercentage) {
         this.signalSubclassResponsibilityFor(this.remainingMoneyNotEnoughDueToExcessOfRepeatedStickers);
     }
 

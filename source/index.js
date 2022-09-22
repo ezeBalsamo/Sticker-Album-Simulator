@@ -38,8 +38,9 @@ const stickers = [...argentinaStickers, ...brazilStickers];
 
 const stickersProvider = new RandomStickersProvider(stickers);
 const packSpecification = new PackSpecification(150, 5);
-const playerNotifier = new DOMBasedInteractionSystem();
+const interactionSystem = new DOMBasedInteractionSystem();
 
-const simulator = new StickersAlbumSimulator(stickersProvider, packSpecification, playerNotifier);
-
-simulator.startSimulation();
+interactionSystem.withPlayerDo((player) => {
+    const simulator = new StickersAlbumSimulator(player, stickersProvider, packSpecification, interactionSystem);
+    simulator.startSimulation();
+})
