@@ -2,7 +2,8 @@ import PackProvider from "../packs/PackProvider.js";
 import {differenceBetween} from "../collection/extensions.js";
 
 export default class StickersAlbumSimulator {
-    constructor(stickersProvider, packSpecification, interactionSystem) {
+    constructor(player, stickersProvider, packSpecification, interactionSystem) {
+        this.player = player;
         this.stickersProvider = stickersProvider;
         this.packSpecification = packSpecification;
         this.interactionSystem = interactionSystem;
@@ -45,12 +46,12 @@ export default class StickersAlbumSimulator {
                 this.runTheSimulationSpendingAtMost(remainingMoney);
             });
         }else {
-            this.interactionSystem.simulationHasEnded(this.isAlbumCompleted(), remainingMoney, this.purchasedPacks.length, this.completionPercentage());
+            this.interactionSystem.simulationHasEnded(this.isAlbumCompleted(), this.player, remainingMoney, this.purchasedPacks.length, this.completionPercentage());
         }
     }
 
     startSimulation() {
-        this.interactionSystem.aboutToStartSimulation();
+        this.interactionSystem.aboutToStartSimulationFor(this.player);
         this.interactionSystem.withMoneyWillingToSpendDo(moneyWillingToSpend => {
             const minimumPriceForCompleteness = this.minimumPriceForCompleteness();
             if (moneyWillingToSpend < minimumPriceForCompleteness) {

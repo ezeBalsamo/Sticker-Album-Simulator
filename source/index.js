@@ -40,6 +40,7 @@ const stickersProvider = new RandomStickersProvider(stickers);
 const packSpecification = new PackSpecification(150, 5);
 const interactionSystem = new DOMBasedInteractionSystem();
 
-const simulator = new StickersAlbumSimulator(stickersProvider, packSpecification, interactionSystem);
-
-simulator.startSimulation();
+interactionSystem.withPlayerDo((player) => {
+    const simulator = new StickersAlbumSimulator(player, stickersProvider, packSpecification, interactionSystem);
+    simulator.startSimulation();
+})

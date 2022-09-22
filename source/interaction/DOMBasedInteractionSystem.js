@@ -48,8 +48,8 @@ export default class DOMBasedInteractionSystem extends UserInteractionSystem {
         this.openingPacksParagraph.innerText = text;
     }
 
-    aboutToStartSimulation() {
-        this.updateGeneralNotificationTextTo("Hi there! So, you want to complete this album... your wallet is going to suffer, you know that, right?");
+    aboutToStartSimulationFor(player) {
+        this.updateGeneralNotificationTextTo(`Hi ${player}! So, you want to complete this album... your wallet is going to suffer, you know that, right?`);
     }
 
     moneyWillingToSpendIsBelow(minimumPriceForCompleteness) {
@@ -89,23 +89,23 @@ export default class DOMBasedInteractionSystem extends UserInteractionSystem {
         this.updateOpenedPacksResultTextTo(`Great, you have ${numberOfNewStickers} new stickers! Your album progress is ${completionPercentage}%.`);
     }
 
-    albumHasBeenCompleted(numberOfPurchasedPacks) {
-        this.updateAlbumCompletionTextWithColorTo(`Congratulations, you managed to complete the album! You needed to buy ${numberOfPurchasedPacks} packs.`, 'green');
+    albumHasBeenCompleted(player, numberOfPurchasedPacks) {
+        this.updateAlbumCompletionTextWithColorTo(`Congratulations ${player}, you managed to complete the album! You needed to buy ${numberOfPurchasedPacks} packs.`, 'green');
     }
 
-    simulationHasEnded(isAlbumCompleted, remainingMoney, numberOfPurchasedPacks, completionPercentage) {
+    simulationHasEnded(isAlbumCompleted, player, remainingMoney, numberOfPurchasedPacks, completionPercentage) {
         this.generalNotificationParagraph.remove();
         this.openedPacksResultParagraph.remove();
         this.openingPacksParagraph.remove();
-        super.simulationHasEnded(isAlbumCompleted, remainingMoney, numberOfPurchasedPacks, completionPercentage);
+        super.simulationHasEnded(isAlbumCompleted, player, remainingMoney, numberOfPurchasedPacks, completionPercentage);
     }
 
-    moneyHasRunOut(completionPercentage) {
-        this.updateAlbumCompletionTextWithColorTo(`Oh no! You've run out of money. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`, 'red');
+    moneyHasRunOut(player, completionPercentage) {
+        this.updateAlbumCompletionTextWithColorTo(`${player}, I'm sorry to tell you this, but you've run out of money. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`, 'red');
     }
 
-    remainingMoneyNotEnoughDueToExcessOfRepeatedStickers(completionPercentage) {
-        this.updateAlbumCompletionTextWithColorTo(`Well, it looks like you got so many repeat stickers that now you do not have enough money to complete the album. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`, 'red');
+    remainingMoneyNotEnoughDueToExcessOfRepeatedStickers(player, completionPercentage) {
+        this.updateAlbumCompletionTextWithColorTo(`Well ${player}, it looks like you got so many repeat stickers that now you do not have enough money to complete the album. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`, 'red');
     }
 
     withMoneyWillingToSpendDo(callback) {
@@ -138,6 +138,25 @@ export default class DOMBasedInteractionSystem extends UserInteractionSystem {
                     paragraph.remove();
                     form.remove();
                     callback(Number(formData.packs));
+                })
+                .build();
+
+        this.mainContent
+            .appendChild(paragraph)
+            .appendChild(form);
+    }
+
+    withPlayerDo(callback) {
+        const paragraph = document.createElement("p");
+        paragraph.innerText = "Hello and welcome! Enter your name to continue...";
+
+        const form =
+            new FormBuilder()
+                .addTextInputLabeled('name')
+                .withDataFromSubmitDo(formData => {
+                    paragraph.remove();
+                    form.remove();
+                    callback(formData.name);
                 })
                 .build();
 
