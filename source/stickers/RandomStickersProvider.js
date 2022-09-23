@@ -1,14 +1,10 @@
 export default class RandomStickersProvider {
     constructor(stickers) {
-        this.stickers = stickers;
+        this.allStickers = stickers;
     }
 
     sampleSticker() {
-        return this.allStickers()[Math.floor(Math.random() * this.stickers.length)];
-    }
-
-    allStickers() {
-        return this.stickers;
+        return this.allStickers[Math.floor(Math.random() * this.allStickers.length)];
     }
 
     provideDifferentStickersUpTo(numberOfStickers) {
