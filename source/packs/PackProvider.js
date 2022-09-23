@@ -13,7 +13,7 @@ export default class PackProvider {
 
     provide(numberOfPacks) {
         const packs = [];
-        for (let i = 0; i < numberOfPacks; i++) {
+        while (packs.length < numberOfPacks) {
             packs.push(this.pack());
         }
         return packs;
