@@ -1,8 +1,8 @@
-import StickerAlbumNotifier from "./StickerAlbumNotifier.js";
+import UserInteractionSystem from "./UserInteractionSystem.js";
 
-export default class AlbumAlertNotifier extends StickerAlbumNotifier {
-    aboutToStartSimulation() {
-        alert("Hi there! So, you want to complete this album... your wallet is going to suffer, you know that, right?");
+export default class AlertBasedInteractionSystem extends UserInteractionSystem {
+    aboutToStartSimulationFor(player) {
+        alert(`Hi ${player}! So, you want to complete this album... your wallet is going to suffer, you know that, right?`);
     }
 
     moneyWillingToSpendIsBelow(minimumPriceForCompleteness) {
@@ -37,15 +37,23 @@ export default class AlbumAlertNotifier extends StickerAlbumNotifier {
         alert(`Great, you have ${numberOfNewStickers} new stickers! Your album progress is ${completionPercentage}%.`);
     }
 
-    albumHasBeenCompleted(numberOfPurchasedPacks) {
-        alert(`Congratulations, you managed to complete the album! You needed to buy ${numberOfPurchasedPacks} packs.`);
+    albumHasBeenCompleted(player, numberOfPurchasedPacks) {
+        alert(`Congratulations ${player}, you managed to complete the album! You needed to buy ${numberOfPurchasedPacks} packs.`);
     }
 
-    moneyHasRunOut(completionPercentage) {
-        alert(`Oh no! You've run out of money. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`);
+    moneyHasRunOut(player, completionPercentage) {
+        alert(`${player}, I'm sorry to tell you this, but you've run out of money. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`);
     }
 
-    remainingMoneyNotEnoughDueToExcessOfRepeatedStickers(completionPercentage) {
-        alert(`Well, it looks like you got so many repeat stickers that now you do not have enough money to complete the album. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`);
+    remainingMoneyNotEnoughDueToExcessOfRepeatedStickers(player, completionPercentage) {
+        alert(`Well ${player}, it looks like you got so many repeat stickers that now you do not have enough money to complete the album. ${this.descriptionThatAlbumIsCompletedUpTo(completionPercentage)}`);
+    }
+
+    withMoneyWillingToSpendDo(callback) {
+        callback(Number(prompt("Before we start, how much money are you willing to spend?")));
+    }
+
+    withNumberOfPacksToPurchaseDo(callback) {
+        callback(Number(prompt("How many packs do you want to purchase?")));
     }
 }
