@@ -14,10 +14,8 @@ export default class RandomStickersProvider {
     provideDifferentStickersUpTo(numberOfStickers) {
         const sampleStickers = [];
         while (sampleStickers.length < numberOfStickers) {
-            let sticker = this.sampleSticker();
-            if (!sampleStickers.includes(sticker)) {
-                sampleStickers.push(sticker);
-            }
+            const sticker = this.sampleSticker();
+            !sampleStickers.includes(sticker) && sampleStickers.push(sticker);
         }
         return sampleStickers;
     }
