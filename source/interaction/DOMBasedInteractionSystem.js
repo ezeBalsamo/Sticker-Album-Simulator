@@ -1,9 +1,7 @@
-import UserInteractionSystem from "./UserInteractionSystem.js";
 import FormBuilder from "./FormBuilder.js";
 
-export default class DOMBasedInteractionSystem extends UserInteractionSystem {
+export default class DOMBasedInteractionSystem {
     constructor() {
-        super();
         this.mainContent = document.getElementById('game');
         this.generalNotificationParagraph = document.createElement('p');
         this.albumCompletionParagraph = document.createElement('p');
@@ -81,6 +79,14 @@ export default class DOMBasedInteractionSystem extends UserInteractionSystem {
         this.updateOpeningPacksTextTo(`Opening ${numberOfPacks} packs...`);
     }
 
+    packsOpened(numberOfNewStickers, completionPercentage) {
+        if (numberOfNewStickers === 0) {
+            this.openedPacksOnlyHadRepeatedStickers();
+        } else {
+            this.openedPacksHadNewStickers(numberOfNewStickers, completionPercentage);
+        }
+    }
+
     openedPacksOnlyHadRepeatedStickers() {
         this.updateOpenedPacksResultTextTo('Oops, looks like you already had all those stickers.');
     }
@@ -89,15 +95,25 @@ export default class DOMBasedInteractionSystem extends UserInteractionSystem {
         this.updateOpenedPacksResultTextTo(`Great, you have ${numberOfNewStickers} new stickers! Your album progress is ${completionPercentage}%.`);
     }
 
-    albumHasBeenCompleted(player, numberOfPurchasedPacks) {
-        this.updateAlbumCompletionTextWithColorTo(`Congratulations ${player}, you managed to complete the album! You needed to buy ${numberOfPurchasedPacks} packs.`, 'green');
-    }
-
     simulationHasEnded(isAlbumCompleted, player, remainingMoney, numberOfPurchasedPacks, completionPercentage) {
         this.generalNotificationParagraph.remove();
         this.openedPacksResultParagraph.remove();
         this.openingPacksParagraph.remove();
-        super.simulationHasEnded(isAlbumCompleted, player, remainingMoney, numberOfPurchasedPacks, completionPercentage);
+        if (isAlbumCompleted) {
+            this.albumHasBeenCompleted(player, numberOfPurchasedPacks);
+        } else if (remainingMoney === 0) {
+            this.moneyHasRunOut(player, completionPercentage);
+        } else {
+            this.remainingMoneyNotEnoughDueToExcessOfRepeatedStickers(player, completionPercentage);
+        }
+    }
+
+    descriptionThatAlbumIsCompletedUpTo(completionPercentage) {
+        return `At least you managed to complete ${completionPercentage}% of your album.`;
+    }
+
+    albumHasBeenCompleted(player, numberOfPurchasedPacks) {
+        this.updateAlbumCompletionTextWithColorTo(`Congratulations ${player}, you managed to complete the album! You needed to buy ${numberOfPurchasedPacks} packs.`, 'green');
     }
 
     moneyHasRunOut(player, completionPercentage) {
