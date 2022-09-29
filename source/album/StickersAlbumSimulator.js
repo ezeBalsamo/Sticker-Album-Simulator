@@ -15,11 +15,15 @@ export default class StickersAlbumSimulator {
     }
 
     completionRatio() {
-        return (this.stickedStickers.length) / this.stickersProvider.allStickers().length;
+        return (this.stickedStickers.length) / this.allStickers().length;
+    }
+
+    allStickers(){
+        return this.stickersProvider.allStickers;
     }
 
     missingStickers() {
-        return differenceBetween(this.stickersProvider.allStickers(), this.stickedStickers, Sticker.areEquivalents);
+        return differenceBetween(this.allStickers(), this.stickedStickers, Sticker.areEquivalents);
     }
 
     numberOfMissingStickers() {

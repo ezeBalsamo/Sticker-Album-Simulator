@@ -1,23 +1,17 @@
 export default class RandomStickersProvider {
     constructor(stickers) {
-        this.stickers = stickers;
+        this.allStickers = stickers;
     }
 
     sampleSticker() {
-        return this.allStickers()[Math.floor(Math.random() * this.stickers.length)];
-    }
-
-    allStickers() {
-        return this.stickers;
+        return this.allStickers[Math.floor(Math.random() * this.allStickers.length)];
     }
 
     provideDifferentStickersUpTo(numberOfStickers) {
         const sampleStickers = [];
         while (sampleStickers.length < numberOfStickers) {
-            let sticker = this.sampleSticker();
-            if (!sampleStickers.includes(sticker)) {
-                sampleStickers.push(sticker);
-            }
+            const sticker = this.sampleSticker();
+            !sampleStickers.includes(sticker) && sampleStickers.push(sticker);
         }
         return sampleStickers;
     }
